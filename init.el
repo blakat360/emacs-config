@@ -84,6 +84,10 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+;; vundo - visual undo tree
+(use-package vundo
+  :straight t)
+
 ;; meow
 (use-package meow
   :straight t
@@ -163,7 +167,7 @@
      '("s" . meow-kill)
      '("t" . meow-till)
      '("u" . meow-undo)
-     '("U" . meow-undo-in-selection)
+     '("U" . vundo)
      '("v" . meow-visit)
      '("w" . meow-mark-word)
      '("W" . meow-mark-symbol)
