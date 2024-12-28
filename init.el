@@ -12,7 +12,7 @@
   (global-set-key (kbd "C-x C-b") 'ibuffer)
   (global-set-key (kbd "M-z") 'zap-up-to-char)
 
-  (global-set-key (kbd "/") 'isearch-forward-regexp)
+  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
   (global-set-key (kbd "C-r") 'isearch-backward-regexp)
   (global-set-key (kbd "C-M-s") 'isearch-forward)
   (global-set-key (kbd "C-M-r") 'isearch-backward)
@@ -134,11 +134,11 @@
      '("b" . meow-back-word)
      '("B" . meow-back-symbol)
      '("c" . meow-change)
-     '("d" . meow-delete)
+     '("d" . meow-kill)
      '("D" . meow-backward-delete)
      '("e" . meow-next-word)
      '("E" . meow-next-symbol)
-     '("f" . meow-find)
+     '("f" . avy-goto-char)
      '("g" . meow-cancel-selection)
      '("G" . meow-grab)
      '("h" . meow-left)
@@ -160,7 +160,7 @@
      '("Q" . meow-goto-line)
      '("r" . meow-replace)
      '("R" . meow-swap-grab)
-     '("s" . meow-kill)
+     '("s" . meow-back-word)
      '("t" . meow-till)
      '("u" . meow-undo)
      '("U" . vundo)
@@ -243,7 +243,7 @@ The DWIM behaviour of this command is as follows:
   :config
   (setq completion-styles '(orderless basic))
   (setq completion-category-defaults nil)
-  (setq completion-category-overrides nil))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package savehist
   :straight t
@@ -283,6 +283,9 @@ The DWIM behaviour of this command is as follows:
     ("S-TAB" . dired-subtree-remove))
   :config
   (setq dired-subtree-use-backgrounds nil))
+
+(use-package avy
+  :straight t)
 
 (use-package trashed
   :straight t
