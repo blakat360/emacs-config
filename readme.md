@@ -1,10 +1,8 @@
 # Todo:
 
-- vertico
-- orderless
-- consult
-- marginalia
+- dape
 - embark
-- corfu
 - cape
-- eglot
+- lisp + sly
+- terminal (eat? vterm?)
+- elisp
