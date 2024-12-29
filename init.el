@@ -49,6 +49,17 @@
 (when (display-graphic-p)
   (context-menu-mode))
 
+;; line numbers in programming modes
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+;; Enable horizontal scrolling
+(setopt mouse-wheel-tilt-scroll t)
+(setopt mouse-wheel-flip-direction t)
+
+;; Misc. UI tweaks
+(blink-cursor-mode -1)                                ; Steady cursor
+(pixel-scroll-precision-mode)                         ; Smooth scrolling
+
 (show-paren-mode 1)
 (setq-default indent-tabs-mode nil)
 (savehist-mode 1)
@@ -114,7 +125,7 @@
 ;; which-key: shows a popup of available keybindings when typing a long key
 ;; sequence (e.g. C-x ...)
 (use-package which-key
-  :ensure t
+  :straight t
   :config
   (which-key-mode))
 
@@ -241,12 +252,49 @@ The DWIM behaviour of this command is as follows:
 (use-package project
   :straight t)
 
+(use-package magit
+  :straight t
+  :bind (("C-x g" . magit-status)))
+
+(use-package emacs
+  :config
+  ;; Treesitter config
+
+  ;; Tell Emacs to prefer the treesitter mode
+  ;; You'll want to run the command `M-x treesit-install-language-grammar' before editing.
+  (setq major-mode-remap-alist
+        '((yaml-mode . yaml-ts-mode)
+          (bash-mode . bash-ts-mode)
+          (js2-mode . js-ts-mode)
+          (typescript-mode . typescript-ts-mode)
+          (json-mode . json-ts-mode)
+          (css-mode . css-ts-mode)
+          (python-mode . python-ts-mode)
+          (c-mode . c-ts-mode)))
+  :hook
+  ;; Auto parenthesis matching
+  ((prog-mode . electric-pair-mode)))
+
+(use-package markdown-mode
+  :hook ((markdown-mode . visual-line-mode)))
+
+(use-package yaml-mode
+  :straight t)
+
+(use-package json-mode
+  :straight t)
+
 (use-package eglot
   :straight t
-  :defer t)
+  :defer t
+  
+  :custom
+  (eglot-send-changes-idle-time 0.1)
+  (eglot-extend-to-xref t)              ; activate Eglot in referenced non-project files
 
-;; line numbers in programming modes
-(add-hook 'prog-mode-hook 'linum-mode)
+  :config
+  (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event
+  )
 
 ;; meow
 (use-package meow
