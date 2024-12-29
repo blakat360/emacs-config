@@ -1,47 +1,56 @@
 ;; better defaults
-  (autoload 'zap-up-to-char "misc"
-    "Kill up to, but not including ARGth occurrence of CHAR." t)
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
 
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
-  ;; https://www.emacswiki.org/emacs/SavePlace
-  (save-place-mode 1)
+;; https://www.emacswiki.org/emacs/SavePlace
+(save-place-mode 1)
 
-  (global-set-key (kbd "M-/") 'hippie-expand)
-  (global-set-key (kbd "C-x C-b") 'ibuffer)
-  (global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-z") 'zap-up-to-char)
 
-  (global-set-key (kbd "C-s") 'isearch-forward-regexp)
-  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
-  (global-set-key (kbd "C-M-s") 'isearch-forward)
-  (global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
 
-  (add-to-list 'display-buffer-alist
+;; don't display package warnings on startup
+(add-to-list 'display-buffer-alist
              '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                (display-buffer-no-window)
                (allow-no-window . t)))
 
-  (show-paren-mode 1)
-  (setq-default indent-tabs-mode nil)
-  (savehist-mode 1)
-  (setq save-interprogram-paste-before-kill t
-        apropos-do-all t
-        mouse-yank-at-point t
-        require-final-newline t
-        visible-bell t
-        load-prefer-newer t
-        backup-by-copying t
-        frame-inhibit-implied-resize t
-        read-file-name-completion-ignore-case t
-        read-buffer-completion-ignore-case t
-        completion-ignore-case t
-        ediff-window-setup-function 'ediff-setup-windows-plain
-        custom-file (expand-file-name "custom.el" user-emacs-directory))
+;; integrate system clipboard with emacs
+(setq select-enable-clipboard t)
+(setq select-enable-primary t)
+(setq interprogram-paste-function 'x-selection-value)
+(setq x-select-enable-clipboard t)
+(setq x-select-enable-primary t)
+(setq x-cut-buffer-or-selection 'primary)
 
-  (unless backup-directory-alist
-    (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                                   "backups")))))
+(show-paren-mode 1)
+(setq-default indent-tabs-mode nil)
+(savehist-mode 1)
+(setq save-interprogram-paste-before-kill t
+      apropos-do-all t
+      mouse-yank-at-point t
+      require-final-newline t
+      visible-bell t
+      load-prefer-newer t
+      backup-by-copying t
+      frame-inhibit-implied-resize t
+      read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+(unless backup-directory-alist
+  (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
+                                                 "backups")))))
 ;; straight
 (setq straight-use-package-by-default t)
 
@@ -170,7 +179,7 @@
      '("x" . meow-line)
      '("X" . meow-goto-line)
      '("y" . meow-save)
-     '("Y" . meow-sync-grab)
+     '("Y" . meow-clipboard-save)
      '("z" . meow-pop-selection)
      '("/" . isearch-forward-regexp)
      '("'" . repeat)
