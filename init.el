@@ -333,6 +333,11 @@ The DWIM behaviour of this command is as follows:
   (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event
   )
 
+(use-package cape
+  :straight t
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+
 (straight-use-package
  '(eat :type git
        :host codeberg
