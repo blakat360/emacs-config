@@ -8,3 +8,5 @@ auto-save-list
 history.el
 dape-breakpoints
 backups/
+recentf
+tramp

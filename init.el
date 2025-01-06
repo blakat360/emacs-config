@@ -187,10 +187,11 @@ The DWIM behaviour of this command is as follows:
 
 (use-package orderless
   :straight t
+  :custom
+  (completion-category-overrides '((file (styles basic partial-completion))))
   :config
   (setq completion-styles '(orderless basic))
-  (setq completion-category-defaults nil)
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  (setq completion-category-defaults nil))
 
 (use-package savehist
   :straight t
@@ -322,6 +323,18 @@ The DWIM behaviour of this command is as follows:
   :config
   (repeat-mode))
 
+(define-derived-mode plainer-c-mode c-mode "pC"
+  "A plainer/saner C-mode with no internal electric machinery.
+    Needed to have eglot work properly with cpp files"
+  (c-toggle-electric-state -1)
+  (setq-local electric-indent-local-mode-hook nil)
+  (setq-local electric-indent-mode-hook nil)
+  (electric-indent-local-mode 1)
+  (dolist (key '(?\" ?\' ?\{ ?\} ?\( ?\) ?\[ ?\]))
+    (local-set-key (vector key) 'self-insert-command)))
+
+
+
 (use-package eglot
   :defer t
   
@@ -330,8 +343,16 @@ The DWIM behaviour of this command is as follows:
   (eglot-extend-to-xref t)              ; activate Eglot in referenced non-project files
 
   :config
-  (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event
+  (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event 
   )
+
+
+(add-hook
+ 'c-mode-common-hook
+ ;; make autocomplete work in c/cpp
+ (lambda ()
+   (define-key c-mode-base-map (kbd "<tab>") 'indent-for-tab-command)
+   ))
 
 (use-package cape
   :straight t
@@ -373,4 +394,6 @@ The DWIM behaviour of this command is as follows:
   :config
   (evil-collection-init)
   (define-key evil-normal-state-map (kbd "f") 'avy-goto-char)
-  (define-key evil-visual-state-map (kbd "f") 'avy-goto-char))
+  (define-key evil-normal-state-map (kbd "U") 'vundo)
+  (define-key evil-visual-state-map (kbd "f") 'avy-goto-char)
+  )
