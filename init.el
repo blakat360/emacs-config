@@ -4,6 +4,13 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
+;; elisp libs
+(use-package dash
+  :straight t)
+
+(use-package s
+  :straight t)
+
 ;; better defaults
 (autoload 'zap-up-to-char "misc"
   "Kill up to, but not including ARGth occurrence of CHAR." t)
@@ -222,7 +229,6 @@ The DWIM behaviour of this command is as follows:
     (corfu-history-mode 1)
     (add-to-list 'savehist-additional-variables 'corfu-history)))
 
-;;; The file manager (Dired)
 (use-package dirvish
   :init
   (dirvish-override-dired-mode)
@@ -378,6 +384,7 @@ The DWIM behaviour of this command is as follows:
   )
 
 ;; Enable repeat mode for more ergonomic `dape' use
+
 (use-package repeat
   :config
   (repeat-mode))
@@ -409,6 +416,14 @@ The DWIM behaviour of this command is as follows:
 (use-package expand-region
   :straight t
   :bind ("C-=" . er/expand-region))
+
+
+(use-package origami
+  :straight t
+  :config
+  (add-to-list 'origami-parser-alist '(emacs-lisp-mode . origami-indent-parser))
+  (global-origami-mode 1)
+  )
 
 (use-package evil
   :straight t
