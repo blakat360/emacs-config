@@ -100,6 +100,10 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; theming
+(use-package all-the-icons
+  :straight t
+  )
+
 (use-package doom-themes
   :straight t
   :config
@@ -176,11 +180,6 @@ The DWIM behaviour of this command is as follows:
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
-(use-package nerd-icons-dired
-  :straight t
-  :hook
-  (dired-mode . nerd-icons-dired-mode))
-
 ;;; Configure the minibuffer and completions
 
 (use-package vertico
@@ -221,22 +220,54 @@ The DWIM behaviour of this command is as follows:
     (add-to-list 'savehist-additional-variables 'corfu-history)))
 
 ;;; The file manager (Dired)
-(setq dired-recursive-copies 'always)
-(setq dired-recursive-deletes 'always)
-(setq delete-by-moving-to-trash t)
-(setq dired-dwim-target t)
-
-(use-package dired-subtree
-  :straight t
-  :after dired
-  :bind
-  ( :map dired-mode-map
-    ("<tab>" . dired-subtree-toggle)
-    ("TAB" . dired-subtree-toggle)
-    ("<backtab>" . dired-subtree-remove)
-    ("S-TAB" . dired-subtree-remove))
+(use-package dirvish
+  :init
+  (dirvish-override-dired-mode)
+  (define-key dired-mode-map (kbd "<left>") #'dired-up-directory)
+  (define-key dired-mode-map (kbd "h") #'dired-up-directory)
+  (define-key dired-mode-map (kbd "<right>") #'dired-find-file)
+  (define-key dired-mode-map (kbd "<l>") #'dired-find-file)
+  :custom
+  (dirvish-quick-access-entries ; It's a custom option, `setq' won't work
+   '(;("h" "~/"                          "Home")
+     ("d" "~/Downloads/"                "Downloads")
+     ("m" "/mnt/"                       "Drives")
+     ("t" "~/.local/share/Trash/files/" "TrashCan")))
   :config
-  (setq dired-subtree-use-backgrounds nil))
+  (dirvish-peek-mode) ; Preview files in minibuffer
+  (dirvish-side-follow-mode) ; similar to `treemacs-follow-mode'
+
+  (setq dired-recursive-copies 'always)
+  (setq delete-by-moving-to-trash t)
+  (setq dired-dwim-target t)
+
+  (setq dirvish-mode-line-format
+        '(:left (sort symlink) :right (omit yank index)))
+  (setq dirvish-attributes
+        '(all-the-icons file-time file-size collapse subtree-state vc-state git-msg))
+  (setq delete-by-moving-to-trash t)
+  (setq dired-listing-switches
+        "-l --almost-all --human-readable --group-directories-first --no-group")
+  :bind ; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
+  (("C-c f" . dirvish-fd)
+   :map dirvish-mode-map ; Dirvish inherits `dired-mode-map'
+   ("a"   . dirvish-quick-access)
+   ("f"   . dirvish-file-info-menu)
+   ("y"   . dirvish-yank-menu)
+   ("N"   . dirvish-narrow)
+   ("^"   . dirvish-history-last)
+   ; ("h"   . dirvish-history-jump) ; remapped `describe-mode'
+   ("s"   . dirvish-quicksort)    ; remapped `dired-sort-toggle-or-edit'
+   ("v"   . dirvish-vc-menu)      ; remapped `dired-view-file'
+   ("<tab>" . dirvish-subtree-toggle)
+   ("M-f" . dirvish-history-go-forward)
+   ("M-b" . dirvish-history-go-backward)
+   ("M-l" . dirvish-ls-switches-menu)
+   ("M-m" . dirvish-mark-menu)
+   ("M-t" . dirvish-layout-toggle)
+   ("M-s" . dirvish-setup-menu)
+   ("M-e" . dirvish-emerge-menu)
+   ("M-j" . dirvish-fd-jump)))
 
 (use-package avy
   :straight t)
@@ -348,18 +379,6 @@ The DWIM behaviour of this command is as follows:
   :config
   (repeat-mode))
 
-(define-derived-mode plainer-c-mode c-mode "pC"
-  "A plainer/saner C-mode with no internal electric machinery.
-    Needed to have eglot work properly with cpp files"
-  (c-toggle-electric-state -1)
-  (setq-local electric-indent-local-mode-hook nil)
-  (setq-local electric-indent-mode-hook nil)
-  (electric-indent-local-mode 1)
-  (dolist (key '(?\" ?\' ?\{ ?\} ?\( ?\) ?\[ ?\]))
-    (local-set-key (vector key) 'self-insert-command)))
-
-
-
 (use-package eglot
   :defer t
   
@@ -383,11 +402,6 @@ The DWIM behaviour of this command is as follows:
   :straight t
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
-
-(use-package dirvish
-  :straight t
-  :init
-  (dirvish-override-dired-mode))
 
 (use-package expand-region
   :straight t
