@@ -23,6 +23,9 @@
 ;; short yes/no answers
 (setopt use-short-answers t) 
 
+;; no welcome to emacs
+(setq inhibit-startup-screen t)
+
 ;; integrate system clipboard with emacs
 (setq select-enable-clipboard t)
 (setq select-enable-primary t)
