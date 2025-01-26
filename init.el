@@ -446,5 +446,7 @@ The DWIM behaviour of this command is as follows:
   (evil-collection-init)
   (define-key evil-normal-state-map (kbd "f") 'avy-goto-char)
   (define-key evil-normal-state-map (kbd "U") 'vundo)
+
   (define-key evil-visual-state-map (kbd "f") 'avy-goto-char)
+  (define-key evil-visual-state-map (kbd "s") 'visual-replace)
   )
