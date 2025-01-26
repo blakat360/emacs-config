@@ -400,7 +400,7 @@ The DWIM behaviour of this command is as follows:
   (fset #'jsonrpc--log-event #'ignore)  ; massive perf boost---don't log every event 
   )
 
-
+;; new c mode
 (add-hook
  'c-mode-common-hook
  ;; make autocomplete work in c/cpp
@@ -417,6 +417,11 @@ The DWIM behaviour of this command is as follows:
   :straight t
   :bind ("C-=" . er/expand-region))
 
+(use-package visual-replace
+  :straight t
+  :defer nil
+  :config
+  (visual-replace-global-mode 1))
 
 (use-package origami
   :straight t
