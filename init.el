@@ -338,21 +338,10 @@ The DWIM behaviour of this command is as follows:
   :init
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
-(straight-use-package
- '(eat :type git
-       :host codeberg
-       :repo "akib/emacs-eat"
-       :files ("*.el" ("term" "term/*.el") "*.texi"
-               "*.ti" ("terminfo/e" "terminfo/e/*")
-               ("terminfo/65" "terminfo/65/*")
-               ("integration" "integration/*")
-               (:exclude ".dir-locals.el" "*-tests.el"))))
-
-
-;; For `eat-eshell-mode'.
-(add-hook 'eshell-load-hook #'eat-eshell-mode)
-;; For `eat-eshell-visual-command-mode'.
-(add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+(use-package dirvish
+  :straight t
+  :init
+  (dirvish-override-dired-mode))
 
 (use-package expand-region
   :straight t
