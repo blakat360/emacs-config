@@ -463,6 +463,7 @@ The DWIM behaviour of this command is as follows:
       "b" 'switch-to-buffer
       "s" 'save-buffer
       "r" 'recentf-open
+      "d" 'dirvish-side
       ) 
     )
   )
