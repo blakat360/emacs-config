@@ -444,9 +444,25 @@ The DWIM behaviour of this command is as follows:
   :straight  t
   :config
   (evil-collection-init)
+
   (define-key evil-normal-state-map (kbd "f") 'avy-goto-char)
   (define-key evil-normal-state-map (kbd "U") 'vundo)
 
   (define-key evil-visual-state-map (kbd "f") 'avy-goto-char)
   (define-key evil-visual-state-map (kbd "s") 'visual-replace)
+
+  (use-package general
+    :ensure t
+    :config
+    (general-create-definer my-leader-def
+      :prefix "SPC")
+    (my-leader-def
+      :states '(normal)
+      ;; Root level bindings
+      "f" 'find-file
+      "b" 'switch-to-buffer
+      "s" 'save-buffer
+      "r" 'recentf-open
+      ) 
+    )
   )
