@@ -59,6 +59,10 @@
 (when (display-graphic-p)
   (context-menu-mode))
 
+;; ripgrep as grep
+(setq grep-command "rg -nS --no-heading "
+      grep-use-null-device nil)
+
 ;; line numbers in programming modes
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
@@ -142,8 +146,6 @@
   :straight t
   :config
   (which-key-mode))
-
-;; meow
 
 
 (defun prot/keyboard-quit-dwim ()
